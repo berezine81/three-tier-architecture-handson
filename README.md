@@ -73,13 +73,13 @@ helm repo update eks`
 
 **CSI-PLUGIN-EBS-CONFIGURATION**
 
-`eksctl create iamserviceaccount --name ebs-csi-controller-sa --namespace kube-system --cluster demo-cluster-three-tier-1 --role-name AmazonEKS_EBS_CSI_DriverRole --role-only --attach-policy-arn arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy --approve
+`eksctl create iamserviceaccount --name ebs-csi-controller-sa --namespace kube-system --cluster demo-cluster-three-tier-1 --role-name AmazonEKS_EBS_CSI_DriverRole --role-only --attach-policy-arn arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy --approve`
 
-eksctl create addon --name aws-ebs-csi-driver --cluster demo-cluster-three-tier-1  --service-account-role-arn arn:aws:iam::<AWS-ACCOUNT-ID>:role/AmazonEKS_EBS_CSI_DriverRole --force
+`eksctl create addon --name aws-ebs-csi-driver --cluster demo-cluster-three-tier-1  --service-account-role-arn arn:aws:iam::<AWS-ACCOUNT-ID>:role/AmazonEKS_EBS_CSI_DriverRole --force`
 
-eksctl create iamserviceaccount --name ebs-csi-controller-sa --namespace kube-system --cluster demo-cluster-three-tier-1 --role-name AmazonEKS_EBS_CSI_DriverRole --role-only --attach-policy-arn arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy --approve
+`eksctl create iamserviceaccount --name ebs-csi-controller-sa --namespace kube-system --cluster demo-cluster-three-tier-1 --role-name AmazonEKS_EBS_CSI_DriverRole --role-only --attach-policy-arn arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy --approve`
 
-eksctl create addon --name aws-ebs-csi-driver --cluster demo-cluster-three-tier-1  --service-account-role-arn arn:aws:iam::<AWS-ACCOUNT-ID>:role/```
+`eksctl create addon --name aws-ebs-csi-driver --cluster demo-cluster-three-tier-1  --service-account-role-arn arn:aws:iam::<AWS-ACCOUNT-ID>:role/`
 
 **DEPLOY YAMLS WITH HELM CHART**
 
@@ -95,6 +95,7 @@ eksctl create addon --name aws-ebs-csi-driver --cluster demo-cluster-three-tier-
 #### ACCESSING THE APPLICATION AT REMOTE HOST PUBLICIP:PORT
 
 The application can be accessed at DNS of Ingress Load Balancer that we have created.
+
 #### Application deployed on EKS Cluster and accessible through instance IP and port 🎉
 
 ![image](https://github.com/dv-sharma/three-tier-architecture-handson/assets/65087388/343a9b94-bbd4-40fd-9993-16eeaffdfe1d)
