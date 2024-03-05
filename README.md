@@ -39,42 +39,53 @@ The code already has any required Instana components installed, making it very e
 `eksctl create cluster --name demo-cluster-three-tier-1 --region us-east-1`
 
 **LISTING OIDC PROVIDERS**
+
 `aws iam list-open-id-connect-providers`
 
 **ASSOCIATING WITH CLUSTER**
+
 `eksctl utils associate-iam-oidc-provider --cluster demo-cluster-three-tier-1 --approve`
 
 **SETTING UP ALB ADDONS**
+
 DOWNLOAD THE POLICY FROM HERE: https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.5.4/docs/install/iam_policy.json
 
 **CREATING POLICY**
+
 `aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json`
 
 **INSTALL LOADBALANCER**
+
 `helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --setclusterName=demo-cluster-three-tier-1 --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller --set region=us-east-1 --set vpcId=vpc-0d5bd0e9558c3fc6a`
 
 **CREATE SERVICE ACCOUNT**
+
 `eksctl create iamserviceaccount --cluster=demo-cluster-three-tier-1 --namespace=kube-system --name=aws-load-balancer-controller --role-name AmazonEKSLoadBalancerControllerRole --attach-policy-arn=arn:aws:iam::<AWS-ACCOUNT-ID>:policy/AWSLoadBalancerControllerIAMPolicy --approve`
 
 **ADD HELM REPO**
+
 `helm repo add eks https://aws.github.io/eks-charts
 helm repo update eks`
 
 **INSTALL LOADBALANCER**
+
 `helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=demo-cluster-three-tier-1 --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller --set region=us-east-1 --set vpcId=vpc-0d5bd0e9558c3fc6a`
 
 **CSI-PLUGIN-EBS-CONFIGURATION**
+
 `eksctl create iamserviceaccount --name ebs-csi-controller-sa --namespace kube-system --cluster demo-cluster-three-tier-1 --role-name AmazonEKS_EBS_CSI_DriverRole --role-only --attach-policy-arn arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy --approve
 
 eksctl create addon --name aws-ebs-csi-driver --cluster demo-cluster-three-tier-1  --service-account-role-arn arn:aws:iam::<AWS-ACCOUNT-ID>:role/AmazonEKS_EBS_CSI_DriverRole --force
 
 eksctl create iamserviceaccount --name ebs-csi-controller-sa --namespace kube-system --cluster demo-cluster-three-tier-1 --role-name AmazonEKS_EBS_CSI_DriverRole --role-only --attach-policy-arn arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy --approve
 
-eksctl create addon --name aws-ebs-csi-driver --cluster demo-cluster-three-tier-1  --service-account-role-arn arn:aws:iam::<AWS-ACCOUNT-ID>:role/`
+eksctl create addon --name aws-ebs-csi-driver --cluster demo-cluster-three-tier-1  --service-account-role-arn arn:aws:iam::<AWS-ACCOUNT-ID>:role/```
 
 **DEPLOY YAMLS WITH HELM CHART**
+
 `helm install robot-shop --namespace robot-shop .`
 **CREATING INGRESS LOAD BALANCER**
+
 `kubectl apply -f .\ingress.yaml`
 
 **VIEW THE PODS**
@@ -82,8 +93,10 @@ eksctl create addon --name aws-ebs-csi-driver --cluster demo-cluster-three-tier-
 ![image](https://github.com/dv-sharma/three-tier-architecture-handson/assets/65087388/0510be0a-6070-4174-81c8-0d7c2ce067ba)
 
 #### ACCESSING THE APPLICATION AT REMOTE HOST PUBLICIP:PORT
+
 The application can be accessed at DNS of Ingress Load Balancer that we have created.
 #### Application deployed on EKS Cluster and accessible through instance IP and port 🎉
+
 ![image](https://github.com/dv-sharma/three-tier-architecture-handson/assets/65087388/343a9b94-bbd4-40fd-9993-16eeaffdfe1d)
 
 **FIRST PART ACCOMPLISHED!**
