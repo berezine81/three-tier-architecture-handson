@@ -22,7 +22,7 @@ More information about the development of this project here: [blog post](https:/
 - **Second part** will be to add DevSecOps practises & build an automation pipeline.
 - **Third part** will be to setup robust monitoring infrastructure on my cluster.
 
-### PART1 DEPLOYING ON KUBERNETES CLUSTER MANUALLY
+### PART1 DEPLOYING ON KUBERNETES CLUSTER MANUALLY (USE THE EKS DIRECTORY)
 ###  ENVIRONMENT
 CLOUD & INFRA: AWS EKS
 APPLICATION ARCHITECTUR:
