@@ -19,8 +19,8 @@ More information about the development of this project here: [blog post](https:/
 
 ### TASKS 
 - **PART1 DEPLOYING ON KUBERNETES CLUSTER MANUALLY** First part of the project will be to deploy this application on EKS Cluster.
-- **Second part** will be to add DevSecOps practises & build an automation pipeline.
-- **Third part** will be to setup robust monitoring infrastructure on my cluster.
+- **Second part** will be to setup robust monitoring infrastructure on my cluster.
+- **Third part** will be to add DevSecOps practises & build an automation pipeline.
 
 ### PART1 DEPLOYING ON KUBERNETES CLUSTER MANUALLY (USE THE EKS DIRECTORY)
 ###  ENVIRONMENT
@@ -101,6 +101,42 @@ The application can be accessed at DNS of Ingress Load Balancer that we have cre
 ![image](https://github.com/dv-sharma/three-tier-architecture-handson/assets/65087388/343a9b94-bbd4-40fd-9993-16eeaffdfe1d)
 
 **FIRST PART ACCOMPLISHED!**
+
+## PART2 : SETUP OF MONITORING WITH PROMETHES & GRAFANA || LOGGING WITH EFD STACK
+
+### STEPS
+**ADDING METRICS SERVER**
+`kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml`
+**VIEW METRICS**
+`kubectl get deployment metrics-server -n kube-system`
+`kubectl top nodes`
+`kubectl top nodes -n kube-system`
+
+**INSTALL WITH HELM PACKAGE MANAGER**
+`helm repo add stable https://charts.helm.sh/stable`
+`helm install stable prometheus-community/kube-prometheus-stack`
+
+**VIEW PODS**
+`kubectl --namespace default get pods -l "release=stable"`
+
+**MAKE THE SERVICE TYPE OF GRAFANA & PROMETHUES TO LOADBALANCER**
+`edit svc stable-kube-prometheus-sta-prometheus`
+`kubectl edit svc stable-grafana`
+
+**ACCESS THE GRAFANA & PROMETHEUS THROUGH THE SERVICES EXTERNAL IP**
+`kubectl get svc`
+
+**LOGIN INTO GRAFANA:**
+USER: admin 
+PASSWORD: prom-operator
+
+![image](https://github.com/dv-sharma/three-tier-architecture-handson/assets/65087388/017dfafa-f7a1-4b11-8bdf-fb3478ce113b)
+![image](https://github.com/dv-sharma/three-tier-architecture-handson/assets/65087388/849e5cc7-614e-4524-a717-e0a3e56210db)
+
+
+
+
+
 
 
 
