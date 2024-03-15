@@ -19,7 +19,6 @@ spec:
       {{ end }}
       containers:
       - name: web
-        service: web
         image: {{ .Values.image.repo }}/robot-shop-microservices:web-{{ .Values.image.version }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         {{- if .Values.eum.key }}
