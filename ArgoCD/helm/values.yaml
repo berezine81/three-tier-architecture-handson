@@ -2,7 +2,7 @@
 # Default is docker/robotshop/image:latest
 image:
   repo: 684272599297.dkr.ecr.us-east-1.amazonaws.com
-  version: 47
+  version: 49
   pullPolicy: IfNotPresent
 
 # EUM configuration
