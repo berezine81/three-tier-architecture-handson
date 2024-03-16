@@ -59,14 +59,26 @@
                 }
                 
             }
-            stage('Update image version in Github') {
-                steps {
-                    updateValuesYAML()
-                }
-                
+            stage('Update Values File for helm deployment') {
+        environment {
+            GIT_REPO_NAME = "three-tier-architecture-handson"
+            GIT_USER_NAME = "dv-sharma"
+        }
+        steps {
+            withCredentials([string(credentialsId: 'GITHUBCRED', variable: 'GITHUB_TOKEN')]) {
+                sh '''
+                    git config user.email "divyamsha05@gmail.com"
+                    git config user.name "dv-sharma"
+                    BUILD_NUMBER=${BUILD_NUMBER}
+                    sed -i "s/version:.*/version: ${BUILD_NUMBER}/" /var/lib/jenkins/workspace/RobotShopMicroservices/ArgoCD/helm/values.yaml
+                    git add /var/lib/jenkins/workspace/RobotShopMicroservices/ArgoCD/helm/values.yaml
+                    git commit -m "Updated values yaml with build image number ${BUILD_NUMBER}"
+                    git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:master
+                '''
             }
         }
-    }
+        }
+    }}
 
     def deployService(service) {
         dir(service) {
@@ -96,26 +108,25 @@
     }
 
 
-    def updateValuesYAML() {
-        GIT_REPOS_NAME = "three-tier-architecture-handson"
-        GIT_USER = "dv-sharma"
+    // def updateValuesYAML() {
+    //     GIT_REPOS_NAME = "three-tier-architecture-handson"
+    //     GIT_USER = "dv-sharma"
 
-        withCredentials([string(credentialsId: 'GITHUB_CRED', variable: 'GITHUB_TOKEN')]) 
-        {
-             sh '''
+    //     withCredentials([string(credentialsId: 'GITHUB_CRED', variable: 'GITHUB_TOKEN')]) 
+    //     {
+    //          sh '''
                 
-                git config user.email "divyam.sharma3@gmail.com"
-                git config user.name "dv-sharma"
-                BUILD_NUMBER=${BUILD_NUMBER}
-                sed -i "s/version:.*/version: ${BUILD_NUMBER}/" /var/lib/jenkins/workspace/RobotShopMicroservices/ArgoCD/helm/values.yaml
-                git add /var/lib/jenkins/workspace/RobotShopMicroservices/ArgoCD/helm/values.yaml
-                git commit -m "Updated values yaml with build image number ${BUILD_NUMBER}"
-                git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
-            '''
-            
-            
-            }
-        }
+    //             git config user.email "divyam.sharma3@gmail.com"
+    //             git config user.name "dv-sharma"
+    //             BUILD_NUMBER=${BUILD_NUMBER}
+    //             sed -i "s/version:.*/version: ${BUILD_NUMBER}/" /var/lib/jenkins/workspace/RobotShopMicroservices/ArgoCD/helm/values.yaml
+    //             git add /var/lib/jenkins/workspace/RobotShopMicroservices/ArgoCD/helm/values.yaml
+    //             git commit -m "Updated values yaml with build image number ${BUILD_NUMBER}"
+    //             git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+    //         '''     
+    //         }
+    // }
+    
 
 
 
