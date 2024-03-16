@@ -1,0 +1,122 @@
+    pipeline {
+        agent any
+
+        parameters {
+            choice(
+                name: 'SERVICE_NAME',
+                choices: ['catalogue', 'user', 'cart', 'shipping', 'ratings', 'payment', 'dispatch','mongo','mysql','web', 'ALL'],
+                description: 'Select the service to deploy'
+            )
+        }
+        
+        environment {
+            AWS_REGION = 'us-east-1'
+            EKS_CLUSTER_NAME = 'demo-cluster-three-tier-1'
+            URLECR = '684272599297.dkr.ecr.us-east-1.amazonaws.com'
+            REPO = 'robot-shop-microservices'
+        }
+        
+        stages {
+            stage('Connect to EKS') {
+                steps {
+                    sh "aws eks --region ${AWS_REGION} update-kubeconfig --name ${EKS_CLUSTER_NAME}"
+                }
+            }
+            
+            stage('Check Nodes') {
+                steps {
+                    sh "kubectl get nodes"
+                }
+            }
+            
+            stage('Checkout') {
+                steps {
+                    checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/dv-sharma/three-tier-architecture-handson']])
+                }
+            }
+            
+            stage('Docker build image') {
+                steps {
+                    script {
+                        if (params.SERVICE_NAME == 'ALL') {
+                            deployServiceAll()
+                        } else {
+                            deployService(params.SERVICE_NAME)
+                        }
+                    }
+                }
+            }
+            
+            stage('Push to ECR') {
+                steps {
+                    script {
+                        if (params.SERVICE_NAME == 'ALL') {
+                            pushToECRAll()
+                        } else {
+                            pushToECR(params.SERVICE_NAME)
+                        }
+                    }
+                }
+                
+            }
+            stage('Update image version in Github') {
+                steps {
+                    updateValuesYAML()
+                }
+                
+            }
+        }
+    }
+
+    def deployService(service) {
+        dir(service) {
+            sh "docker build -t ${REPO}:${service}-${BUILD_NUMBER} ."
+        }
+    }
+
+    def pushToECR(service) {
+        def imageName = "${REPO}:${service}-${BUILD_NUMBER}" 
+        sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${URLECR}/robot-shop-microservices"
+        sh "docker tag ${imageName} ${URLECR}/${imageName}"
+        sh "docker push ${URLECR}/${imageName}"
+    }
+
+    def deployServiceAll() {
+        def allServices = ['cart','catalogue','dispatch','mongo','mysql','payment','user','shipping','ratings','web']
+        for (String svc : allServices) {
+            deployService(svc)
+        }
+    }
+
+    def pushToECRAll() {
+        def allServices = ['cart','catalogue','dispatch','mongo','mysql','payment','user','shipping','ratings','web']
+        for (String svc : allServices) {
+            pushToECR(svc)
+        }
+    }
+
+
+    def updateValuesYAML() {
+        GIT_REPOS_NAME = "three-tier-architecture-handson"
+        GIT_USER = "dv-sharma"
+
+        withCredentials([string(credentialsId: 'GITHUB_CRED', variable: 'GITHUB_TOKEN')]) 
+        {
+             sh '''
+                
+                git config user.email "divyam.sharma3@gmail.com"
+                git config user.name "dv-sharma"
+                BUILD_NUMBER=${BUILD_NUMBER}
+                sed -i "s/version:.*/version: ${BUILD_NUMBER}/" /var/lib/jenkins/workspace/RobotShopMicroservices/ArgoCD/helm/values.yaml
+                git add /var/lib/jenkins/workspace/RobotShopMicroservices/ArgoCD/helm/values.yaml
+                git commit -m "Updated values yaml with build image number ${BUILD_NUMBER}"
+                git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+            '''
+            
+            
+            }
+        }
+
+
+
+    
