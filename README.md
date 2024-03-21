@@ -1,8 +1,13 @@
-# Three Tier Architecture Deployment on AWS EKS
+# 1.Three Tier Architecture Deployment on AWS EKS using helm charts
+# 2.Observability using Prometheus & Grafana
+# 3.Logging with EFK Stack
+# 4.CI Pipeline for Microservices
+# 5.CD with ArgoCD
 
 #### PROJECT IDEA
 
-I came across this project developed by IBM Instana team ,"Stan's Robot Shop" is a sample microservice application you can use as a sandbox to test and learn containerised application orchestration and monitoring techniques. I picked up this application to practise handson skills for deploying a microservices application on Kubernetes Managed Cluster. This project is perfect to practise building docker containers,Deployment with helm charts, orchestrating with Kubernetes,Montoring of the application & cluster.
+I came across this project developed by IBM Instana team ,"Stan's Robot Shop" is a sample microservice application you can use as a sandbox to test and learn containerised application orchestration and monitoring techniques. I picked up this application to practise handson skills for deploying a microservices application on Kubernetes Managed Cluster. This project is perfect to practise building docker containers,Deployment with helm charts, orchestrating with Kubernetes,Montoring of the application & cluster, and demonstrate CI pipeline for microservices & CD with ArgoCD skills.
+
 This sample microservice application has been built using these technologies:
 - NodeJS ([Express](http://expressjs.com/))
 - Java ([Spring Boot](https://spring.io/))
@@ -18,14 +23,16 @@ This sample microservice application has been built using these technologies:
 More information about the development of this project here: [blog post](https://www.instana.com/blog/stans-robot-shop-sample-microservice-application/)
 
 ### TASKS 
-- **PART1 DEPLOYING ON KUBERNETES CLUSTER MANUALLY** First part of the project will be to deploy this application on EKS Cluster.
-- **Second part** will be to setup robust monitoring infrastructure on my cluster.
-- **Third part** will be to add DevSecOps practises & build an automation pipeline.
+- **PART1 DEPLOYING ON KUBERNETES EKS CLUSTER MANUALLY USING HELM CHARTS** First part of the project will be to deploy this application on EKS Cluster.
+- **PART2 : SETUP OF MONITORING WITH PROMETHES & GRAFANA**
+- **PART3: LOGGING WITH EFK (Elasticsearc,FluentD,Kibana) STACK SETUP**
+- **PART4: Build an automation CI pipeline to build & publish images to ECR repo.**
+- **PART5: Deploy the microservices application using ArgoCD.**
 
 ### PART1 DEPLOYING ON KUBERNETES CLUSTER MANUALLY (USE THE EKS DIRECTORY)
 ###  ENVIRONMENT
 CLOUD & INFRA: AWS EKS
-APPLICATION ARCHITECTUR:
+APPLICATION ARCHITECTURE:
 The web page is a Single Page Application written using AngularJS (1.x), its resources are served by Nginx which also acts as a reverse proxy for the backend microservices. Those microservices are written in different languages using various frameworks, providing a wide range of example scenarios. MongoDB is used as the data store for the product catalogue and the registered users. MySQL is used for the look up of the shipping information. Redis is used to hold the active shopping carts. The order pipeline is processed via RabbitMQ.
 The code already has any required Instana components installed, making it very easy to start monitoring the application with Instana, you just have to install the agent on the platform. Instana End User Monitoring is also preconfigured, you just need to add your unique key to the environment of the Nginx container.
 
@@ -83,7 +90,8 @@ helm repo update eks`
 
 **DEPLOY YAMLS WITH HELM CHART**
 
-`helm install robot-shop --namespace robot-shop .`
+`helm install robot-shop --namespace robot-shop .
+`
 **CREATING INGRESS LOAD BALANCER**
 
 `kubectl apply -f .\ingress.yaml`
@@ -102,36 +110,53 @@ The application can be accessed at DNS of Ingress Load Balancer that we have cre
 
 **FIRST PART ACCOMPLISHED!**
 
-## PART2 : SETUP OF MONITORING WITH PROMETHES & GRAFANA || LOGGING WITH EFD STACK
+## PART2 : SETUP OF MONITORING WITH PROMETHES & GRAFANA
 
 ### STEPS
 **ADDING METRICS SERVER**
 `kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml`
+
 **VIEW METRICS**
 `kubectl get deployment metrics-server -n kube-system`
+
 `kubectl top nodes`
+
 `kubectl top nodes -n kube-system`
 
 **INSTALL WITH HELM PACKAGE MANAGER**
+
 `helm repo add stable https://charts.helm.sh/stable`
+
 `helm install stable prometheus-community/kube-prometheus-stack`
 
 **VIEW PODS**
+
 `kubectl --namespace default get pods -l "release=stable"`
 
 **MAKE THE SERVICE TYPE OF GRAFANA & PROMETHUES TO LOADBALANCER**
+
 `edit svc stable-kube-prometheus-sta-prometheus`
+
 `kubectl edit svc stable-grafana`
 
 **ACCESS THE GRAFANA & PROMETHEUS THROUGH THE SERVICES EXTERNAL IP**
+
 `kubectl get svc`
 
 **LOGIN INTO GRAFANA:**
+
 USER: admin 
 PASSWORD: prom-operator
 
 ![image](https://github.com/dv-sharma/three-tier-architecture-handson/assets/65087388/017dfafa-f7a1-4b11-8bdf-fb3478ce113b)
 ![image](https://github.com/dv-sharma/three-tier-architecture-handson/assets/65087388/849e5cc7-614e-4524-a717-e0a3e56210db)
+
+## PART3: LOGGING WITH EFK STACK SETUP
+
+STEPS FOR SETTING UP EFK STACK : [HERE](https://github.com/dv-sharma/three-tier-architecture-handson/tree/master/EFKStack)
+
+## PART4: Build an automation CI pipeline to build & publish images to ECR repo. & PART5:Deploy the microservices application using ArgoCD.**  
+[HERE](https://github.com/dv-sharma/three-tier-architecture-handson/tree/master/ArgoCD)
 
 
 
