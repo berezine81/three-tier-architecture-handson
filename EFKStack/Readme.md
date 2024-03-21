@@ -21,7 +21,7 @@ I am performing the following tasks in my project:
 
 The "Stan's Robot Shop" application serves as an exceptional platform to enhance your practical skills in deploying microservices on a Kubernetes Managed Cluster (EKS). This application utilizes various technologies, including NodeJS, Java (Spring Boot), Python (Flask), Golang, PHP (Apache), and more, creating a practical & realistic microservices environment.
 
-This Blog specifically focuses on Part 3 of the project – setting up the EFK Stack for logging within your EKS cluster. EFK stands for Elasticsearch, Fluentd, and Kibana, a powerful trio that forms a comprehensive log management solution.
+This project specifically focuses on Part 3 of the project – setting up the EFK Stack for logging within your EKS cluster. EFK stands for Elasticsearch, Fluentd, and Kibana, a powerful trio that forms a comprehensive log management solution.
 
 * **Elasticsearch:** A scalable and powerful search engine that serves as the foundation for storing and indexing your logs.
     
@@ -680,6 +680,4 @@ By deploying the EFK Stack, we created a centralized platform for managing and a
 
 Additionally, we provided detailed YAML configurations and explanations for setting up Elasticsearch, Fluentd DaemonSet, Kibana deployment, and other components necessary for logging.
 
-I will be writing a separate blog for the ArgoCD implementation, so stay tuned & follow me if you liked this one.
 
-*If you found this blog helpful and want to stay updated on future articles, follow me on* [*LinkedIn*](https://www.linkedin.com/in/divyam-sharma0501/) *and my blog. I'm actively seeking new opportunities where I can leverage my expertise in cloud-native technologies to drive innovation and deliver impactful projects. Reach out to me via LinkedIn or email at* ***divyamsha05@gmail.com*** *if you're interested in collaborating or discussing potential opportunities.*
