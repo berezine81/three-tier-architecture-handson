@@ -99,8 +99,10 @@ helm repo update eks`
 `kubectl apply -f .\ingress.yaml`
 
 **VIEW THE PODS**
+![image](https://github.com/dv-sharma/three-tier-architecture-handson/assets/65087388/343a9b94-bbd4-40fd-9993-16eeaffdfe1d)
 
 kubectl get pods -n robotshop
+
 
 #### ACCESSING THE APPLICATION AT REMOTE HOST PUBLICIP:PORT
 
@@ -111,6 +113,7 @@ The application can be accessed at DNS of Ingress Load Balancer that we have cre
 
 
 **FIRST PART ACCOMPLISHED!**
+![image](https://github.com/dv-sharma/three-tier-architecture-handson/assets/65087388/0510be0a-6070-4174-81c8-0d7c2ce067ba)
 
 ## PART2 : SETUP OF MONITORING WITH PROMETHES & GRAFANA
 
