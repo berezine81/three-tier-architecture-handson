@@ -100,7 +100,7 @@ helm repo update eks`
 
 **VIEW THE PODS**
 
-![image](https://github.com/dv-sharma/three-tier-architecture-handson/assets/65087388/0510be0a-6070-4174-81c8-0d7c2ce067ba)
+kubectl get pods -n robotshop
 
 #### ACCESSING THE APPLICATION AT REMOTE HOST PUBLICIP:PORT
 
@@ -109,6 +109,7 @@ The application can be accessed at DNS of Ingress Load Balancer that we have cre
 #### Application deployed on EKS Cluster and accessible through instance IP and port 🎉
 
 ![image](https://github.com/dv-sharma/three-tier-architecture-handson/assets/65087388/343a9b94-bbd4-40fd-9993-16eeaffdfe1d)
+![image](https://github.com/dv-sharma/three-tier-architecture-handson/assets/65087388/0510be0a-6070-4174-81c8-0d7c2ce067ba)
 
 **FIRST PART ACCOMPLISHED!**
 
