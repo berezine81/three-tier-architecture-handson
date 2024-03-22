@@ -39,9 +39,9 @@
                 steps {
                     script {
                         if (params.SERVICE_NAME == 'ALL') {
-                            deployServiceAll()
+                            buildImageAll()
                         } else {
-                            deployService(params.SERVICE_NAME)
+                            buildImage(params.SERVICE_NAME)
                         }
                     }
                 }
@@ -80,7 +80,7 @@
         }
     }}
 
-    def deployService(service) {
+    def buildImage(service) {
         dir(service) {
             sh "docker build -t ${REPO}:${service}-${BUILD_NUMBER} ."
         }
@@ -93,10 +93,10 @@
         sh "docker push ${URLECR}/${imageName}"
     }
 
-    def deployServiceAll() {
+    def buildImageAll() {
         def allServices = ['cart','catalogue','dispatch','mongo','mysql','payment','user','shipping','ratings','web']
         for (String svc : allServices) {
-            deployService(svc)
+            buildImage(svc)
         }
     }
 
@@ -106,28 +106,3 @@
             pushToECR(svc)
         }
     }
-
-
-    // def updateValuesYAML() {
-    //     GIT_REPOS_NAME = "three-tier-architecture-handson"
-    //     GIT_USER = "dv-sharma"
-
-    //     withCredentials([string(credentialsId: 'GITHUB_CRED', variable: 'GITHUB_TOKEN')]) 
-    //     {
-    //          sh '''
-                
-    //             git config user.email "divyam.sharma3@gmail.com"
-    //             git config user.name "dv-sharma"
-    //             BUILD_NUMBER=${BUILD_NUMBER}
-    //             sed -i "s/version:.*/version: ${BUILD_NUMBER}/" /var/lib/jenkins/workspace/RobotShopMicroservices/ArgoCD/helm/values.yaml
-    //             git add /var/lib/jenkins/workspace/RobotShopMicroservices/ArgoCD/helm/values.yaml
-    //             git commit -m "Updated values yaml with build image number ${BUILD_NUMBER}"
-    //             git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
-    //         '''     
-    //         }
-    // }
-    
-
-
-
-    
