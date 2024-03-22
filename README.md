@@ -1,3 +1,5 @@
+![image](https://github.com/dv-sharma/three-tier-architecture-handson/assets/65087388/aff06220-ba09-4fff-adb5-a3f6a512f253)
+
 # 1.Three Tier Architecture Deployment on AWS EKS using helm charts
 # 2.Observability using Prometheus & Grafana
 # 3.Logging with EFK Stack
